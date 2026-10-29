@@ -1,0 +1,10 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {availableForks,compareTimelines} from "./compare.mjs";
+test("first choice preview",()=>{const x=compareTimelines(["origin"]);assert.equal(x.isPreview,true);assert.equal(x.primary.ending,"The Archivist");assert.equal(x.alternate.ending,"The Revision");});
+test("latest decision",()=>{const x=compareTimelines(["origin","broadcast","stranger","loop"]);assert.equal(x.primary.ending,"The Loop");assert.equal(x.alternate.ending,"The Revision");});
+test("earlier decisions",()=>{const x=compareTimelines(["origin","broadcast","stranger","loop"],0);assert.deepEqual(x.alternate.path,["origin","door","mirror","echo"]);});
+test("converging branches",()=>{const x=compareTimelines(["origin","door","photo","echo"],1);assert.equal(x.sameEnding,true);});
+test("incomplete path projection",()=>{const x=compareTimelines(["origin","door"]);assert.equal(x.primary.projected,true);});
+test("valid fork indices",()=>{assert.deepEqual(availableForks(["origin","broadcast","stranger"]).map(f=>f.index),[0,1]);assert.throws(()=>compareTimelines(["origin","door"],2),RangeError);});
+test("invalid history sanitized",()=>assert.equal(compareTimelines(["origin","tower","loop"]).isPreview,true));
