@@ -46,3 +46,11 @@ Host the static files on GitHub Pages, Netlify, Vercel, or any static host. No e
 ## License
 
 MIT © 2026 Ghassen258.
+
+## Compare alternate timelines
+
+Click **↗↘ Compare timelines** under the Reality Map. Choose a previously visited decision to rewrite and watch the two branching paths unfold side by side, with their different (or sometimes identical) endings. Before making any choice, the button lets you preview the two starting futures.
+
+This deterministic projection preserves subsequent first/second-choice positions where possible, and defaults unplayed choices to the first option. **It does not change saved progress.** The new comparison engine and tests are in `compare.mjs` and `compare.test.mjs`.
+
+Run all tests with `node --test story.test.mjs compare.test.mjs`.
