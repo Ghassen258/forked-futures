@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1022"><meta name="description" content="An interactive multiverse story about the weight of small decisions."><title>Forked Futures — one choice, infinite almosts</title><link rel="stylesheet" href="styles.css"><script type="module" src="app.mjs"></script></head>
+<body><div class="stars" aria-hidden="true"></div><div class="shell">
+<header><a class="brand" href="./"><span>✳</span> FORKED<span>FUTURES</span></a><div class="online">● SIMULATION ONLINE <small>/ v1.0</small></div></header>
+<main><div class="intro"><p class="eyebrow">INTERACTIVE FICTION <span>✦</span> THE MANY-WORLDS EXPERIMENT</p><h1>One choice.<br><em>Infinite almosts.</em></h1><p class="lede">Somewhere, a version of you chose differently. Follow a signal across branching realities and see which universe remembers you.</p></div>
+<div class="workspace"><section class="story" aria-labelledby="title">
+<div class="paneltop"><span id="world"></span><span id="clock">03:17</span></div><div class="planet"><div class="ring"></div><div class="orb"></div></div>
+<div class="chapter"><p class="eyebrow">CURRENT REALITY <span id="step">01</span></p><h2 id="title"></h2><p id="text"></p></div>
+<div class="choices" id="choices" aria-live="polite"></div><div class="storybottom"><span>PRESS <kbd>1</kbd> OR <kbd>2</kbd> TO CHOOSE</span><button id="back" type="button">↶ Rewind</button></div></section>
+<aside class="map-panel" aria-label="Reality map"><div class="mapheader"><div><p class="eyebrow">PARALLEL PATHWAYS</p><h2>Reality map</h2></div><div class="spark">✳</div></div><p class="hint">Your choices illuminate a path. Select a visited node to travel back through a wormhole.</p><div id="map"></div>
+<div class="legend"><span>● VISITED</span><span>● CURRENT</span><span>● UNKNOWN</span></div><div class="stats"><div><strong id="realities">01</strong><small>REALITIES VISITED</small></div><div><strong id="endings">00/07</strong><small>ENDINGS FOUND</small></div></div><button class="restart" id="restart" type="button">↻ Start a new timeline</button></aside></div></main>
+<footer>AN EXPERIMENT IN CAUSALITY · NO FRAMEWORKS OR APIs · YOUR JOURNEY STAYS IN THIS BROWSER</footer></div></body></html>
