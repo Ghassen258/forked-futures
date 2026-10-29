@@ -1,4 +1,5 @@
 import { chapters, tracePath, checkStory } from "./story.mjs";
+import { availableForks, compareTimelines } from "./compare.mjs";
 if(checkStory().length)throw Error("Invalid story graph");
 const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg",KEY="forked-futures-v1";
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return {path:tracePath(s.path),endings:Array.isArray(s.endings)?s.endings.filter(id=>chapters[id]?.ending):[]};}catch{return {path:["origin"],endings:[]};}}
@@ -28,5 +29,41 @@ function render(){const id=state.path.at(-1),c=chapters[id];if(c.ending&&!state.
 }
 $("back").addEventListener("click",()=>{if(state.path.length>1){state.path.pop();render();}});
 $("restart").addEventListener("click",()=>{state.path=["origin"];render();});
-document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||["INPUT","TEXTAREA","BUTTON"].includes(document.activeElement?.tagName))return;if(e.key==="1"||e.key==="2")choose(Number(e.key)-1);if(e.key==="Backspace"){$("back").click();e.preventDefault();}});
+document.addEventListener("keydown",e=>{if($("compare-dialog").open||e.altKey||e.ctrlKey||e.metaKey||["INPUT","TEXTAREA","BUTTON"].includes(document.activeElement?.tagName))return;if(e.key==="1"||e.key==="2")choose(Number(e.key)-1);if(e.key==="Backspace"){$("back").click();e.preventDefault();}});
+
+const dialog=$("compare-dialog");
+let forkIndex;
+function showRoute(id,path,changedAt,playedLength,primary){
+ const list=$(id);list.replaceChildren();
+ path.forEach((node,i)=>{
+  const li=document.createElement("li");if(i>=changedAt)li.classList.add("different");
+  const title=document.createElement("strong");title.textContent=chapters[node].title;
+  const description=document.createElement("small");
+  const parent=i?chapters[path[i-1]]:null;
+  description.textContent=i===0?"The beginning":parent?.choices?.find(([,next])=>next===node)?.[0]??"Ending";
+  if(primary&&i>=playedLength)description.textContent+=" · projected";
+  li.append(title,description);list.append(li);
+ });
+}
+function renderComparison(){
+ const forks=availableForks(state.path);
+ if(!forks.some(f=>f.index===forkIndex))forkIndex=forks.at(-1).index;
+ const select=$("fork-point");select.replaceChildren();
+ forks.forEach(f=>{const option=document.createElement("option");option.value=String(f.index);option.textContent="Choice "+(f.index+1)+" · "+f.title;select.append(option);});
+ select.value=String(forkIndex);
+ const result=compareTimelines(state.path,forkIndex);
+ const a=chapters[result.primary.path.at(-1)],b=chapters[result.alternate.path.at(-1)];
+ $("compare-summary").textContent=result.isPreview?"Preview the two first possible futures.":"You chose “"+result.originalChoice+"”. What if you chose “"+result.alternateChoice+"”?";
+ $("primary-status").textContent=result.primary.projected?"YOUR TIMELINE · PROJECTED":"YOUR TIMELINE · REACHED";
+ $("primary-ending").textContent=a.ending;$("alternate-ending").textContent=b.ending;
+ $("primary-description").textContent=a.text;$("alternate-description").textContent=b.text;
+ showRoute("primary-route",result.primary.path,result.forkIndex+1,state.path.length,true);
+ showRoute("alternate-route",result.alternate.path,result.forkIndex+1,state.path.length,false);
+ $("compare-insight").textContent=result.sameEnding?"PARADOX · "+result.changedScenes+" scenes change, but both paths share the same ending.":"BUTTERFLY EFFECT · "+result.changedScenes+" scenes differ. One decision changes the ending from “"+result.primary.ending+"” to “"+result.alternate.ending+"”.";
+}
+$("compare").addEventListener("click",()=>{forkIndex=undefined;renderComparison();dialog.showModal();});
+$("compare-close").addEventListener("click",()=>dialog.close());
+dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
+$("fork-point").addEventListener("change",e=>{forkIndex=Number(e.target.value);renderComparison();});
+
 render();
