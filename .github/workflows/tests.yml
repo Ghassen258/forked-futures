@@ -10,5 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test story.test.mjs
+      - run: node --test story.test.mjs compare.test.mjs
       - run: node --check app.mjs
+
+      - run: node --check compare.mjs
