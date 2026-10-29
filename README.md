@@ -13,6 +13,12 @@ An atmospheric interactive microfiction about a message from tomorrow, the conse
 - Responsive nebula-inspired interface, reduced-motion support.
 - No runtime dependencies, frameworks, or build step.
 
+## Compare alternate timelines
+
+Click **↗↘ Compare timelines** under the Reality Map. Choose a previously visited decision to rewrite and watch the two branching paths unfold side by side, with their different (or sometimes identical) endings. Before making any choice, the button lets you preview the two starting futures.
+
+This deterministic projection preserves subsequent first/second-choice positions where possible, and defaults unplayed choices to the first option. **It does not change saved progress.** The comparison engine and tests are in `compare.mjs` and `compare.test.mjs`.
+
 ## Run locally
 
 Because the project uses native ES modules, run a local web server rather than opening the file with `file://`:
@@ -27,13 +33,10 @@ python -m http.server 8000
 Requires Node.js 18 or newer:
 
 ```bash
-node --test story.test.mjs
+node --test story.test.mjs compare.test.mjs
 node --check app.mjs
+node --check compare.mjs
 ```
-
-## Deploy
-
-Host the static files on GitHub Pages, Netlify, Vercel, or any static host. No environment variables are required.
 
 ## Project structure
 
@@ -41,16 +44,9 @@ Host the static files on GitHub Pages, Netlify, Vercel, or any static host. No e
 - `app.mjs` — navigation, state persistence, rendering, interactive SVG graph
 - `styles.css` — visual design and responsive styles
 - `index.html` — accessible application shell
-- `story.test.mjs` — dependency-free Node.js tests
+- `compare.mjs` — branch projection and timeline comparison
+- `story.test.mjs`, `compare.test.mjs` — dependency-free Node.js tests
 
 ## License
 
 MIT © 2026 Ghassen258.
-
-## Compare alternate timelines
-
-Click **↗↘ Compare timelines** under the Reality Map. Choose a previously visited decision to rewrite and watch the two branching paths unfold side by side, with their different (or sometimes identical) endings. Before making any choice, the button lets you preview the two starting futures.
-
-This deterministic projection preserves subsequent first/second-choice positions where possible, and defaults unplayed choices to the first option. **It does not change saved progress.** The new comparison engine and tests are in `compare.mjs` and `compare.test.mjs`.
-
-Run all tests with `node --test story.test.mjs compare.test.mjs`.
